@@ -23,6 +23,7 @@ const defaultMNodal = {
   title: '',
   icon: 'material-symbols:folder-outline',
   sort: 9999,
+  groupType: 'website' as 'website' | 'webpage',
 }
 
 const editModalArg = ref<EditModalArg>({
@@ -41,15 +42,26 @@ const editModalArg = ref<EditModalArg>({
 })
 
 const groups = ref<Panel.ItemIconGroup[]>([])
+const currentGroupType = ref<'website' | 'webpage'>('website')
 
 function handleAddGroup() {
   editModalArg.value.show = !editModalArg.value.show
+  editModalArg.value.editStatus = 1
+  editModalArg.value.model = {
+    ...defaultMNodal,
+    groupType: currentGroupType.value,
+  }
 }
 
 function handleEditGroup(groupInfo: Panel.ItemIconGroup) {
   editModalArg.value.show = true
   editModalArg.value.model = groupInfo
   editModalArg.value.editStatus = 2
+}
+
+function handleSwitchGroupType(groupType: 'website' | 'webpage') {
+  currentGroupType.value = groupType
+  refreshList()
 }
 
 function handleDragSort() {
@@ -99,13 +111,16 @@ function handleDelete(groupInfo: Panel.ItemIconGroup) {
 function handleSaveGroup() {
   formRef.value?.validate((errors) => {
     if (!errors) {
-      edit(editModalArg.value.model).then(({ code, msg }) => {
+      edit({
+        ...editModalArg.value.model,
+        groupType: editModalArg.value.model.groupType || currentGroupType.value,
+      }).then(({ code, msg }) => {
         if (code !== 0)
           ms.error(msg)
 
         refreshList()
         editModalArg.value.show = false
-        editModalArg.value.model = { ...defaultMNodal }
+        editModalArg.value.model = { ...defaultMNodal, groupType: currentGroupType.value }
       })
     }
     else { console.log(errors) }
@@ -113,7 +128,7 @@ function handleSaveGroup() {
 }
 
 function refreshList() {
-  getList<Common.ListResponse<Panel.ItemIconGroup[]>>().then(({ code, data }) => {
+  getList<Common.ListResponse<Panel.ItemIconGroup[]>>(currentGroupType.value).then(({ code, data }) => {
     groups.value = data.list
   })
 }
@@ -126,6 +141,15 @@ onMounted(() => {
 <template>
   <div class="h-full">
     <div class="p-2">
+      <div class="mb-2 flex items-center gap-2">
+        <NButton size="small" :type="currentGroupType === 'website' ? 'primary' : 'default'" @click="handleSwitchGroupType('website')">
+          网站
+        </NButton>
+        <NButton size="small" :type="currentGroupType === 'webpage' ? 'primary' : 'default'" @click="handleSwitchGroupType('webpage')">
+          网页
+        </NButton>
+      </div>
+
       <NButton type="success" size="small" style="margin-right: 10px;" @click="handleAddGroup">
         {{ $t('common.add') }}
       </NButton>

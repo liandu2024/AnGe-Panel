@@ -2,6 +2,7 @@ package panel
 
 import (
 	"math"
+	"strings"
 	"sun-panel/api/api_v1/common/apiData/commonApiStructs"
 	"sun-panel/api/api_v1/common/apiReturn"
 	"sun-panel/api/api_v1/common/base"
@@ -16,6 +17,18 @@ import (
 type ItemIconGroup struct {
 }
 
+type getListRequest struct {
+	GroupType string `json:"groupType"`
+}
+
+func normalizeGroupType(groupType string) string {
+	groupType = strings.TrimSpace(strings.ToLower(groupType))
+	if groupType == "webpage" {
+		return "webpage"
+	}
+	return "website"
+}
+
 func (a *ItemIconGroup) Edit(c *gin.Context) {
 	userInfo, _ := base.GetCurrentUserInfo(c)
 	req := models.ItemIconGroup{}
@@ -26,10 +39,11 @@ func (a *ItemIconGroup) Edit(c *gin.Context) {
 	}
 
 	req.UserId = userInfo.ID
+	req.GroupType = normalizeGroupType(req.GroupType)
 
 	if req.ID != 0 {
 		// 修改
-		updateField := []string{"IconJson", "Icon", "Title", "Url", "LanUrl", "Description", "OpenMethod", "GroupId", "UserId"}
+		updateField := []string{"Icon", "Title", "Description", "Sort", "GroupType", "UserId"}
 		if req.Sort != 0 {
 			updateField = append(updateField, "Sort")
 		}
@@ -45,98 +59,84 @@ func (a *ItemIconGroup) Edit(c *gin.Context) {
 }
 
 func (a *ItemIconGroup) GetList(c *gin.Context) {
-
 	userInfo, _ := base.GetCurrentUserInfo(c)
 	groups := []models.ItemIconGroup{}
 
+	req := getListRequest{}
+	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil && err.Error() != "EOF" {
+		apiReturn.ErrorParamFomat(c, err.Error())
+		return
+	}
+
+	groupType := normalizeGroupType(req.GroupType)
+
 	err := global.Db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Order("sort ,created_at").Where("user_id=?", userInfo.ID).Find(&groups).Error; err != nil {
+		// 兼容旧数据：历史分组没有类型时默认归为 website
+		if err := tx.Model(&models.ItemIconGroup{}).
+			Where("user_id=? AND (group_type='' OR group_type IS NULL)", userInfo.ID).
+			Update("group_type", "website").Error; err != nil {
 			apiReturn.ErrorDatabase(c, err.Error())
 			return err
 		}
 
-		// 判断分组是否为空，为空将自动创建默认分组（网站 + 网页）
+		query := tx.Order("sort ,created_at").Where("user_id=?", userInfo.ID)
+		if req.GroupType != "" {
+			query = query.Where("group_type=?", groupType)
+		}
+		if err := query.Find(&groups).Error; err != nil {
+			apiReturn.ErrorDatabase(c, err.Error())
+			return err
+		}
+
+		// 分组为空时自动创建默认分组
 		if len(groups) == 0 {
-			websiteGroup := models.ItemIconGroup{
-				Title:  "网站",
-				UserId: userInfo.ID,
-				Icon:   "material-symbols:language",
-				Sort:   1,
-			}
-			if err := tx.Create(&websiteGroup).Error; err != nil {
-				apiReturn.ErrorDatabase(c, err.Error())
-				return err
-			}
-
-			webPageGroup := models.ItemIconGroup{
-				Title:  "网页",
-				UserId: userInfo.ID,
-				Icon:   "material-symbols:web-asset",
-				Sort:   2,
-			}
-			if err := tx.Create(&webPageGroup).Error; err != nil {
-				apiReturn.ErrorDatabase(c, err.Error())
-				return err
-			}
-
-			// 将当前账号下所有无分组图标更新到默认“网站”组
-			if err := tx.Model(&models.ItemIcon{}).
-				Where("user_id=? AND (item_icon_group_id=0 OR item_icon_group_id IS NULL)", userInfo.ID).
-				Update("item_icon_group_id", websiteGroup.ID).Error; err != nil {
-				apiReturn.ErrorDatabase(c, err.Error())
-				return err
-			}
-
-			groups = append(groups, websiteGroup, webPageGroup)
-		} else {
-			// 兼容旧数据：
-			// 1) 历史默认组 APP 自动改名为“网站”
-			// 2) 自动补一个“网页”分组
-			hasWebsite := false
-			hasWebPage := false
-			for i := range groups {
-				if groups[i].Title == "网站" {
-					hasWebsite = true
+			if req.GroupType == "" {
+				websiteGroup := models.ItemIconGroup{
+					Title:     "网站",
+					UserId:    userInfo.ID,
+					Icon:      "material-symbols:language",
+					Sort:      1,
+					GroupType: "website",
 				}
-				if groups[i].Title == "网页" {
-					hasWebPage = true
+				if err := tx.Create(&websiteGroup).Error; err != nil {
+					apiReturn.ErrorDatabase(c, err.Error())
+					return err
 				}
-			}
 
-			if !hasWebsite {
-				for i := range groups {
-					if groups[i].Title == "APP" {
-						if err := tx.Model(&models.ItemIconGroup{}).
-							Where("id=? AND user_id=?", groups[i].ID, userInfo.ID).
-							Updates(map[string]interface{}{
-								"title": "网站",
-								"icon":  "material-symbols:language",
-								"sort":  1,
-							}).Error; err != nil {
-							apiReturn.ErrorDatabase(c, err.Error())
-							return err
-						}
-						groups[i].Title = "网站"
-						groups[i].Icon = "material-symbols:language"
-						groups[i].Sort = 1
-						hasWebsite = true
-						break
-					}
-				}
-			}
-
-			if !hasWebPage {
 				webPageGroup := models.ItemIconGroup{
-					Title:  "网页",
-					UserId: userInfo.ID,
-					Icon:   "material-symbols:web-asset",
-					Sort:   2,
+					Title:     "网页",
+					UserId:    userInfo.ID,
+					Icon:      "material-symbols:web-asset",
+					Sort:      1,
+					GroupType: "webpage",
 				}
 				if err := tx.Create(&webPageGroup).Error; err != nil {
 					apiReturn.ErrorDatabase(c, err.Error())
 					return err
 				}
-				groups = append(groups, webPageGroup)
+
+				// 将当前账号下所有无分组图标更新到默认“网站”组
+				if err := tx.Model(&models.ItemIcon{}).
+					Where("user_id=? AND (item_icon_group_id=0 OR item_icon_group_id IS NULL)", userInfo.ID).
+					Update("item_icon_group_id", websiteGroup.ID).Error; err != nil {
+					apiReturn.ErrorDatabase(c, err.Error())
+					return err
+				}
+
+				groups = append(groups, websiteGroup, webPageGroup)
+			} else {
+				defaultGroup := models.ItemIconGroup{
+					Title:     map[bool]string{true: "网页", false: "网站"}[groupType == "webpage"],
+					UserId:    userInfo.ID,
+					Icon:      map[bool]string{true: "material-symbols:web-asset", false: "material-symbols:language"}[groupType == "webpage"],
+					Sort:      1,
+					GroupType: groupType,
+				}
+				if err := tx.Create(&defaultGroup).Error; err != nil {
+					apiReturn.ErrorDatabase(c, err.Error())
+					return err
+				}
+				groups = append(groups, defaultGroup)
 			}
 		}
 

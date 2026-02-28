@@ -7,9 +7,10 @@ export function edit<T>(req: Panel.ItemIconGroup) {
   })
 }
 
-export function getList<T>() {
+export function getList<T>(groupType?: 'website' | 'webpage') {
   return post<T>({
     url: '/panel/itemIconGroup/getList',
+    data: groupType ? { groupType } : {},
   })
 }
 

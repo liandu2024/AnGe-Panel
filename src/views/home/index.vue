@@ -47,6 +47,7 @@ const settingModalShow = ref(false)
 
 const items = ref<ItemGroup[]>([])
 const filterItems = ref<ItemGroup[]>([])
+const currentGroupType = ref<'website' | 'webpage'>('website')
 
 function openPage(openMethod: number, url: string, title?: string) {
   switch (openMethod) {
@@ -90,7 +91,7 @@ function handWindowIframeIdLoad(payload: Event) {
 
 function getList() {
   // 获取组数据
-  getGroupList<Common.ListResponse<ItemGroup[]>>().then(({ code, data, msg }) => {
+  getGroupList<Common.ListResponse<ItemGroup[]>>(currentGroupType.value).then(({ code, data, msg }) => {
     if (code === 0)
       items.value = data.list
     for (let i = 0; i < data.list.length; i++) {
@@ -320,6 +321,11 @@ function handleAddItem(itemIconGroupId?: number) {
   if (itemIconGroupId)
     currentAddItenIconGroupId.value = itemIconGroupId
 }
+
+function handleSwitchGroupType(groupType: 'website' | 'webpage') {
+  currentGroupType.value = groupType
+  getList()
+}
 </script>
 
 <template>
@@ -364,6 +370,23 @@ function handleAddItem(itemIconGroupId?: number) {
 
         <!-- 应用盒子 -->
         <div :style="{ marginLeft: `${panelState.panelConfig.marginX}px`, marginRight: `${panelState.panelConfig.marginX}px` }">
+          <div class="flex justify-center text-white mt-[20px] mb-[10px]">
+            <div
+              class="cursor-pointer px-4 py-1 rounded-l-full"
+              :class="currentGroupType === 'website' ? 'bg-white/30' : 'bg-white/10'"
+              @click="handleSwitchGroupType('website')"
+            >
+              网站
+            </div>
+            <div class="px-2">|</div>
+            <div
+              class="cursor-pointer px-4 py-1 rounded-r-full"
+              :class="currentGroupType === 'webpage' ? 'bg-white/30' : 'bg-white/10'"
+              @click="handleSwitchGroupType('webpage')"
+            >
+              网页
+            </div>
+          </div>
           <!-- 系统监控状态 -->
           <div
             v-if="panelState.panelConfig.systemMonitorShow

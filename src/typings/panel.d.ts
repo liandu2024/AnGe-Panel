@@ -19,6 +19,7 @@ declare namespace Panel {
         icon?: string
         title?: string
         sort?:number
+        groupType?: 'website' | 'webpage'
     }
 
     interface ItemIcon {
