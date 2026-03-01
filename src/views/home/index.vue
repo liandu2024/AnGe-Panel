@@ -1131,21 +1131,25 @@ html {
 
   /* 移动端网站类：不显示图标，只显示文字+背景色 */
   @media (max-width: 500px) {
-    .icon-info-box .app-icon,
-    .icon-small-box .app-icon {
-      background: rgba(255,255,255,0.15) !important;
+    .icon-info-box > div,
+    .icon-small-box > div {
+      background: rgba(255,255,255,0.12) !important;
       border-radius: 8px;
-      padding: 8px !important;
+      padding: 12px 16px !important;
+      margin: 4px !important;
     }
-    .icon-info-box .app-icon :deep(.icon),
-    .icon-small-box .app-icon :deep(.icon) {
+    .icon-info-box > div :deep(svg),
+    .icon-info-box > div :deep(img),
+    .icon-small-box > div :deep(svg),
+    .icon-small-box > div :deep(img) {
       display: none !important;
     }
-    .icon-info-box .app-icon :deep(.text),
-    .icon-small-box .app-icon :deep(.text) {
+    .icon-info-box > div :deep(.text),
+    .icon-small-box > div :deep(.text) {
       display: block !important;
       color: #fff !important;
       font-weight: 500;
+      font-size: 14px;
     }
   }
 }
