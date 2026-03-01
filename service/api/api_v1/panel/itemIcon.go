@@ -115,14 +115,13 @@ func (a *ItemIcon) Edit(c *gin.Context) {
 
 	// 增加重复性检查
 	if req.Url != "" {
-		var count int64
+		var existItem models.ItemIcon
 		checkDb := global.Db.Model(&models.ItemIcon{}).Where("url = ? AND user_id = ?", req.Url, req.UserId)
 		if req.ID != 0 {
 			checkDb = checkDb.Where("id != ?", req.ID)
 		}
-		checkDb.Count(&count)
-		if count > 0 {
-			apiReturn.Error(c, "已有重复链接，请修改！")
+		if err := checkDb.First(&existItem).Error; err == nil {
+			apiReturn.Error(c, "已有重复链接：["+existItem.Title+"]，请修改！")
 			return
 		}
 	}
