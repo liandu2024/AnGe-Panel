@@ -765,6 +765,7 @@ function getGroupDotTop(groupId?: number) {
                     'w-full webpage-list-container show-native-scrollbar',
                     (itemGroup.items && itemGroup.items.length > 10) ? 'webpage-list-fixed' : ''
                   ]"
+                  :style="{ gap: `${panelState.panelConfig.webpageListGapPx ?? 10}px` }"
                   filter=".not-drag"
                   :disabled="!itemGroup.sortStatus"
                 >
@@ -1242,7 +1243,7 @@ html {
   /* 默认：按内容自然高度（用于少于等于10条的分组，避免把分组之间撑出大空白） */
   overflow-x: hidden;
   padding-right: 4px; /* 防止滚动条紧贴文字 */
-  gap: 0.25rem; /* 行间距（更紧凑） */
+  gap: 10px; /* 网页列表条目间距 */
   display: flex;
   flex-direction: column;
 }

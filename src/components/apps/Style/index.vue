@@ -407,6 +407,13 @@ function resetPanelConfig() {
             <NSlider v-model:value="panelState.panelConfig.groupToGroupGapPx" class="max-w-[200px]" :step="1" :max="120" />
           </div>
         </NGridItem>
+
+        <NGridItem span="12 400:12">
+          <div class="flex items-center mt-[10px]">
+            <span class="mr-[10px]">网页收藏列表间距 (px)</span>
+            <NSlider v-model:value="panelState.panelConfig.webpageListGapPx" class="max-w-[200px]" :step="1" :max="30" />
+          </div>
+        </NGridItem>
       </NGrid>
     </NCard>
 

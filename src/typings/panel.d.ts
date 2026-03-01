@@ -73,6 +73,7 @@ declare namespace Panel {
         searchToBelowGapPx?: number
         tabsToFirstGroupGapPx?: number
         groupToGroupGapPx?: number
+        webpageListGapPx?: number
     }
 
     interface userConfig{
