@@ -44,6 +44,8 @@ A perfect website navigation + webpage bookmarks panel.
 - **默认管理员账号**：`admin`
 - **默认管理员密码**：`admin`
 
+首次启动时会自动创建示例分组和示例网站/网页链接，方便快速体验功能。
+
 > ⚠️ 首次登录后请尽快修改密码！
 
 本仓库基于 **Sun‑Panel 开源版本（MIT License）** 做了面向“日常导航 + 信息收集”的二次开发。

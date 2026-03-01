@@ -6,6 +6,7 @@ import (
 	"path"
 	"sun-panel/lib/cmn"
 	"sun-panel/models"
+	"sun-panel/models/datatype"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -146,6 +147,53 @@ func NotFoundAndCreateUser(db *gorm.DB) error {
 		if errCreate := db.Create(&fUser).Error; errCreate != nil {
 			return errCreate
 		}
+	}
+
+	return nil
+}
+
+// 初始化示例分组和网站数据（如果没有分组）
+func NotFoundAndCreateExampleData(db *gorm.DB) error {
+	var count int64
+	db.Model(&models.ItemIconGroup{}).Count(&count)
+	if count > 0 {
+		return nil // 已有分组，不创建示例
+	}
+
+	userID := uint(1) // 默认第一个用户
+
+	// 示例分组数据
+	groups := []models.ItemIconGroup{
+		{Title: "常用网站", Sort: 1, UserId: userID},
+		{Title: "技术博客", Sort: 2, UserId: userID},
+		{Title: "视频娱乐", Sort: 3, UserId: userID},
+	}
+	if err := db.Create(&groups).Error; err != nil {
+		return err
+	}
+
+	// 示例网站数据（网站模式）
+	sites := []models.ItemIcon{
+		{Title: "Google", Url: "https://www.google.com", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://www.google.com/favicon.ico"}, ItemIconGroupId: int(groups[0].ID), UserId: userID, Sort: 1},
+		{Title: "GitHub", Url: "https://github.com", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://github.com/favicon.ico"}, ItemIconGroupId: int(groups[0].ID), UserId: userID, Sort: 2},
+		{Title: "Baidu", Url: "https://www.baidu.com", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://www.baidu.com/favicon.ico"}, ItemIconGroupId: int(groups[0].ID), UserId: userID, Sort: 3},
+		{Title: "知乎", Url: "https://www.zhihu.com", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://www.zhihu.com/favicon.ico"}, ItemIconGroupId: int(groups[1].ID), UserId: userID, Sort: 1},
+		{Title: "CSDN", Url: "https://blog.csdn.net", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://blog.csdn.net/favicon.ico"}, ItemIconGroupId: int(groups[1].ID), UserId: userID, Sort: 2},
+		{Title: "YouTube", Url: "https://www.youtube.com", Icon: datatype.ItemIconIconInfo{ItemType: 1, Src: "https://www.youtube.com/favicon.ico"}, ItemIconGroupId: int(groups[2].ID), UserId: userID, Sort: 1},
+	}
+	if err := db.Create(&sites).Error; err != nil {
+		return err
+	}
+
+	// 示例网页数据（网页模式 - 信息流）
+	webpages := []models.ItemIcon{
+		{Title: "科技动态 - 今日头条", Url: "https://www.toutiao.com/", Description: "实时科技资讯", ItemIconGroupId: int(groups[1].ID), UserId: userID, Sort: 10},
+		{Title: "编程教程 - 菜鸟教程", Url: "https://www.runoob.com/", Description: "入门编程教程", ItemIconGroupId: int(groups[1].ID), UserId: userID, Sort: 11},
+		{Title: "开源项目 - Gitee", Url: "https://gitee.com/", Description: "代码托管平台", ItemIconGroupId: int(groups[0].ID), UserId: userID, Sort: 4},
+		{Title: "技术社区 - V2EX", Url: "https://www.v2ex.com/", Description: "程序员讨论社区", ItemIconGroupId: int(groups[1].ID), UserId: userID, Sort: 12},
+	}
+	if err := db.Create(&webpages).Error; err != nil {
+		return err
 	}
 
 	return nil

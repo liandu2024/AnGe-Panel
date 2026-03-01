@@ -124,6 +124,7 @@ func DatabaseConnect() {
 	database.CreateDatabase(databaseDrive, global.Db)
 
 	database.NotFoundAndCreateUser(global.Db)
+	database.NotFoundAndCreateExampleData(global.Db)
 }
 
 // 命令行运行
