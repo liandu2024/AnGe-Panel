@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
-import { NBackTop, NButton, NButtonGroup, NDropdown, NModal, NSkeleton, NSpin, NEllipsis, useDialog, useMessage } from 'naive-ui'
+import { NBackTop, NButton, NButtonGroup, NDropdown, NModal, NSkeleton, NSpin, NEllipsis, NPagination, useDialog, useMessage } from 'naive-ui'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { AppIcon, AppStarter, EditItem } from './components'
 import { Clock, SearchBox, SystemMonitor } from '@/components/deskModule'
@@ -50,6 +50,20 @@ const settingModalShow = ref(false)
 const items = ref<ItemGroup[]>([])
 const filterItems = ref<ItemGroup[]>([])
 const currentGroupType = ref<'website' | 'webpage'>('website')
+
+// 分页相关状态：记录每个网页分组当前的页码，默认第一页，每页20条
+const webpagePagination = ref<Record<number, number>>({})
+const PAGE_SIZE = 20
+
+function getGroupPageItems(itemGroup: ItemGroup, groupId?: number) {
+  if (!itemGroup.items || currentGroupType.value !== 'webpage' || itemGroup.sortStatus) {
+    return itemGroup.items
+  }
+  const pid = groupId || 0
+  const currentPage = webpagePagination.value[pid] || 1
+  const start = (currentPage - 1) * PAGE_SIZE
+  return itemGroup.items.slice(start, start + PAGE_SIZE)
+}
 
 const fixedElementStyle = computed(() => {
   const pos = panelState.panelConfig.floatingToolsPosition || 'right-bottom'
@@ -541,7 +555,7 @@ function getGroupDotTop(groupId?: number) {
                   :disabled="!itemGroup.sortStatus"
                 >
                   <div
-                    v-for="item, index in itemGroup.items"
+                    v-for="item, index in getGroupPageItems(itemGroup, itemGroup.id)"
                     :key="index"
                     class="group relative w-full py-2 px-3 mb-2 rounded-lg bg-black/20 text-white flex justify-between items-center hover:text-[#fef08a] transition-colors"
                     :class="itemGroup.sortStatus ? 'cursor-move' : 'cursor-pointer'"
@@ -585,6 +599,17 @@ function getGroupDotTop(groupId?: number) {
                     {{ $t('common.add') }}
                   </div>
                 </VueDraggable>
+                
+                <!-- 网页分组分页器（只有当数据超过一页且非排序模式时显示） -->
+                <div v-if="!itemGroup.sortStatus && itemGroup.items && itemGroup.items.length > PAGE_SIZE" class="flex justify-center mt-4 mb-2">
+                  <NPagination 
+                    v-model:page="webpagePagination[itemGroup.id || 0]" 
+                    :page-size="PAGE_SIZE" 
+                    :item-count="itemGroup.items.length" 
+                    size="small" 
+                    :page-slot="5"
+                  />
+                </div>
               </div>
             </div>
 
@@ -807,6 +832,19 @@ body,
 html {
   overflow: hidden;
   background-color: rgb(54, 54, 54);
+}
+
+/* 让深色背景上的分页器文字变白可见 */
+.n-pagination .n-pagination-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+.n-pagination .n-pagination-item--active {
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.n-pagination .n-pagination-item:hover {
+  color: #fff !important;
 }
 </style>
 
