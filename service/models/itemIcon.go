@@ -16,6 +16,7 @@ type ItemIcon struct {
 	Description     string                    `gorm:"type:varchar(1000)" json:"description"`
 	OpenMethod      int                       `gorm:"type:tinyint(1)" json:"openMethod"`
 	Sort            int                       `gorm:"type:int(11)" json:"sort"`
+	Pinned          bool                      `gorm:"type:tinyint(1);default:0" json:"pinned"`
 	ItemIconGroupId int                       `json:"itemIconGroupId"`
 	UserId          uint                      `json:"userId"`
 	User            User                      `json:"user"`

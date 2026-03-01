@@ -9,6 +9,7 @@ declare namespace Panel {
         title: string
         url: string
         sort?: number
+        pinned?: boolean
         lanUrl?: string
         description?: string
         openMethod: number

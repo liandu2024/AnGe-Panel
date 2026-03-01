@@ -212,6 +212,21 @@ function handleRightMenuSelect(key: string | number) {
   }
 }
 
+function quickTogglePinWebpage(item: Panel.ItemInfo) {
+  const newItem = { ...item, pinned: !item.pinned }
+  
+  import('@/api/panel/itemIcon').then(({ edit }) => {
+    edit(newItem).then(({ code, msg }) => {
+      if (code === 0) {
+        ms.success(newItem.pinned ? '置顶成功' : '已取消置顶')
+        getList()
+      } else {
+        ms.error(`操作失败：${msg}`)
+      }
+    })
+  })
+}
+
 function quickEditWebpage(item: Panel.ItemInfo) {
   handleEditItem({ ...item } as Panel.ItemInfo)
 }
@@ -623,10 +638,13 @@ function getGroupDotTop(groupId?: number) {
                   :disabled="!itemGroup.sortStatus"
                 >
                   <div
-                    v-for="item, index in itemGroup.items"
+                    v-for="item, index in (itemGroup.items || [])"
                     :key="index"
-                    class="group relative w-full py-2 px-3 mb-2 rounded-lg bg-black/20 text-white flex justify-between items-center hover:text-[#fef08a] transition-colors"
-                    :class="itemGroup.sortStatus ? 'cursor-move' : 'cursor-pointer'"
+                    class="group relative w-full py-2 px-3 mb-2 rounded-lg text-white flex justify-between items-center hover:text-[#fef08a] transition-colors shrink-0"
+                    :class="[
+                      itemGroup.sortStatus ? 'cursor-move' : 'cursor-pointer',
+                      item.pinned ? 'bg-[#1e3a8a]/60' : 'bg-black/20'
+                    ]"
                     :title="item.description"
                     @click="handleItemClick(itemGroupIndex, item)"
                     @contextmenu="(e) => handleContextMenu(e, itemGroupIndex, item)"
@@ -646,6 +664,13 @@ function getGroupDotTop(groupId?: number) {
                     
                     <!-- 悬浮操作按钮 -->
                     <div v-if="!itemGroup.sortStatus" class="opacity-0 group-hover:opacity-100 flex items-center gap-2 transition-opacity ml-2">
+                      <div 
+                        class="p-1 rounded bg-black/20 hover:bg-black/40 cursor-pointer flex items-center justify-center text-white"
+                        :title="item.pinned ? '取消置顶' : '置顶'"
+                        @click.stop="quickTogglePinWebpage(item)"
+                      >
+                        <SvgIcon class="text-sm" :icon="item.pinned ? 'material-symbols:keep-off' : 'material-symbols:keep'" />
+                      </div>
                       <div 
                         class="p-1 rounded bg-black/20 hover:bg-black/40 cursor-pointer flex items-center justify-center text-white"
                         title="修改"
@@ -1050,6 +1075,8 @@ html {
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px; /* 防止滚动条紧贴文字 */
+  display: flex;
+  flex-direction: column;
 }
 
 /* 覆盖局部样式，使滚动条颜色在深色背景下协调 */

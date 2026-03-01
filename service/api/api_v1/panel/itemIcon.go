@@ -133,7 +133,7 @@ func (a *ItemIcon) Edit(c *gin.Context) {
 
 	if req.ID != 0 {
 		// 修改
-		updateField := []string{"IconJson", "Icon", "Title", "Url", "LanUrl", "Description", "OpenMethod", "GroupId", "UserId", "ItemIconGroupId"}
+		updateField := []string{"IconJson", "Icon", "Title", "Url", "LanUrl", "Description", "OpenMethod", "GroupId", "UserId", "ItemIconGroupId", "Pinned"}
 		if req.Sort != 0 {
 			updateField = append(updateField, "Sort")
 		}
@@ -218,7 +218,8 @@ func (a *ItemIcon) GetListByGroupId(c *gin.Context) {
 	userInfo, _ := base.GetCurrentUserInfo(c)
 	itemIcons := []models.ItemIcon{}
 
-	if err := global.Db.Order("sort ,created_at").Find(&itemIcons, "item_icon_group_id = ? AND user_id=?", req.ItemIconGroupId, userInfo.ID).Error; err != nil {
+	// Pinned 置顶在前，然后 sort，然后最新创建的时间
+	if err := global.Db.Order("pinned DESC, sort ASC, created_at DESC").Find(&itemIcons, "item_icon_group_id = ? AND user_id=?", req.ItemIconGroupId, userInfo.ID).Error; err != nil {
 		apiReturn.ErrorDatabase(c, err.Error())
 		return
 	}
