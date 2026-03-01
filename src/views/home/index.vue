@@ -678,12 +678,12 @@ function getGroupDotTop(groupId?: number) {
             <div v-if="isMobile" class="ml-2">
               <NButton
                 circle
-                size="small"
+                size="medium"
                 color="#2a2a2a6b"
                 @click="router.push('/login')"
               >
                 <template #icon>
-                  <SvgIcon class="text-white" icon="material-symbols:account-circle" />
+                  <SvgIcon class="text-lg text-white" icon="material-symbols:account-circle" />
                 </template>
               </NButton>
             </div>
@@ -1149,7 +1149,7 @@ html {
   /* 移动端图标整体进一步缩小 */
   .icon-info-box > div,
   .icon-small-box > div {
-    padding: 2px !important;
+    padding: 1px !important;
     overflow: hidden;
     box-sizing: border-box;
   }
