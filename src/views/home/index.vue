@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
 import { NBackTop, NButton, NButtonGroup, NDropdown, NModal, NSkeleton, NSpin, NEllipsis, NPagination, useDialog, useMessage } from 'naive-ui'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, h } from 'vue'
 import { AppIcon, AppStarter, EditItem } from './components'
 import { Clock, SearchBox, SystemMonitor } from '@/components/deskModule'
 import { SvgIcon } from '@/components/common'
@@ -287,27 +287,54 @@ function handleSaveSort(itemGroup: ItemGroup) {
 }
 
 function getDropdownMenuOptions() {
-  const dropdownMenuOptions = [
-    {
-      label: '打开链接',
-      key: 'newWindows',
-    },
-    {
-      label: '复制链接',
-      key: 'copyUrl',
-    },
-  ]
+  const dropdownMenuOptions: any[] = []
+
+  const copyUrl = (url?: string) => {
+    if (url) {
+      navigator.clipboard.writeText(url).then(() => {
+        ms.success('链接已复制')
+        dropdownShow.value = false
+      }).catch(() => ms.error('复制失败'))
+    }
+  }
+
+  const renderCopyButton = (url?: string) => {
+    return h(
+      'div',
+      {
+        class: 'flex items-center justify-center p-1 rounded hover:bg-black/10 cursor-pointer',
+        title: '复制链接',
+        onClick: (e: MouseEvent) => {
+          e.stopPropagation()
+          copyUrl(url)
+        }
+      },
+      [h(SvgIcon, { icon: 'lucide:copy', class: 'text-sm' })]
+    )
+  }
+
+  const renderLabelWithCopy = (label: string, url?: string) => {
+    return h('div', { class: 'flex items-center justify-between w-full min-w-[120px]' }, [
+      h('span', label),
+      renderCopyButton(url)
+    ])
+  }
+
+  dropdownMenuOptions.push({
+    label: () => renderLabelWithCopy('打开链接', currentRightSelectItem.value?.url),
+    key: 'newWindows',
+  })
 
   if (currentRightSelectItem.value?.lanUrl && panelState.networkMode === PanelStateNetworkModeEnum.wan) {
     dropdownMenuOptions.push({
-      label: '打开内网链接',
+      label: () => renderLabelWithCopy('打开内网链接', currentRightSelectItem.value?.lanUrl),
       key: 'openLanUrl',
     })
   }
 
   if (currentRightSelectItem.value?.lanUrl && panelState.networkMode === PanelStateNetworkModeEnum.lan) {
     dropdownMenuOptions.push({
-      label: '打开外网链接',
+      label: () => renderLabelWithCopy('打开外网链接', currentRightSelectItem.value?.lanUrl),
       key: 'openWanUrl',
     })
   }
