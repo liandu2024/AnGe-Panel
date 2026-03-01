@@ -601,13 +601,13 @@ function getGroupDotTop(groupId?: number) {
           <div
             v-for="(itemGroup, itemGroupIndex) in filterItems" :key="itemGroupIndex"
             :ref="(el) => setGroupRef(el, itemGroup.id)"
-            class="item-list mt-[50px]"
+            class="item-list mt-[20px]"
             :class="itemGroup.sortStatus ? 'shadow-2xl border shadow-[0_0_30px_10px_rgba(0,0,0,0.3)]  p-[10px] rounded-2xl' : ''"
             @mouseenter="handleSetHoverStatus(itemGroupIndex, true)"
             @mouseleave="handleSetHoverStatus(itemGroupIndex, false)"
           >
             <!-- 分组标题 -->
-            <div class="text-white text-xl font-extrabold mb-[20px] ml-[10px] flex items-center">
+            <div class="text-white text-xl font-extrabold mb-[10px] ml-[10px] flex items-center">
               <span class="group-title text-shadow flex items-center gap-2">
                 {{ itemGroup.title }}
                 <span v-if="itemGroup.items" class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-normal">
