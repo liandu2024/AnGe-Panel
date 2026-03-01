@@ -39,6 +39,13 @@ A perfect website navigation + webpage bookmarks panel.
 
 > **AnGe-Panel** 是基于 Sun‑Panel（MIT License）的二次开发版本，非官方版本。
 
+## 🔐 首次登录
+
+- **默认管理员账号**：`admin`
+- **默认管理员密码**：`admin`
+
+> ⚠️ 首次登录后请尽快修改密码！
+
 本仓库基于 **Sun‑Panel 开源版本（MIT License）** 做了面向“日常导航 + 信息收集”的二次开发。
 
 - 本仓库 **不是官方仓库**，与原作者/官方无隶属关系；如需官方版本/PRO 功能请前往原项目。
@@ -102,6 +109,22 @@ A perfect website navigation + webpage bookmarks panel.
 ![](./doc/images/window-xunlei.png)
 
 
+
+## 🐳 Docker（推荐）
+
+本仓库已内置 `Dockerfile`，并提供 GitHub Actions 自动构建镜像（发布到 GHCR）：
+
+- 镜像地址（默认）：`ghcr.io/<你的GitHub账号>/<仓库名>:<tag>`
+- 端口：`3002`
+
+示例：
+
+```bash
+docker run -d --name ange-panel -p 3002:3002 \
+  ghcr.io/<owner>/<repo>:latest
+```
+
+> 说明：首次发布后，你可以在 GitHub → Packages 里看到镜像；如需公开下载，请把该 Package 设为 Public。
 
 ## 🐳 Deployment tutorial
 [Deployment Tutorial](https://sun-panel-doc.enianteam.com/usage/quick_deploy.html)
