@@ -1127,22 +1127,23 @@ html {
     left: 4px;
   }
   .p-2\.5 {
-    padding-left: 22px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
-  /* 移动端图标整体缩小 */
+  /* 移动端图标整体进一步缩小 */
   .icon-info-box > div,
   .icon-small-box > div {
-    padding: 4px !important;
+    padding: 2px !important;
   }
   .icon-info-box :deep(.icon),
   .icon-small-box :deep(.icon) {
-    width: 32px !important;
-    height: 32px !important;
+    width: 24px !important;
+    height: 24px !important;
   }
   .icon-info-box :deep(.text),
   .icon-small-box :deep(.text) {
-    font-size: 10px !important;
+    font-size: 8px !important;
   }
 }
 
