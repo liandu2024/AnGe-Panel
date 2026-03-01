@@ -310,7 +310,7 @@ function getDropdownMenuOptions() {
           copyUrl(url)
         }
       },
-      [h(SvgIcon, { icon: 'typcn:clipboard', style: 'font-size: 16px; color: #666;' })]
+      [h(SvgIcon, { icon: 'ion-copy', style: 'font-size: 16px; color: #666;' })]
     )
   }
 
@@ -320,13 +320,12 @@ function getDropdownMenuOptions() {
       { 
         class: 'flex items-center justify-between w-full min-w-[120px]',
         onClick: (e: MouseEvent) => {
-          // 只阻止冒泡，让它能触发外层的 select 事件
           handleRightMenuSelect(key || '')
         }
       }, 
       [
-        h('span', label),
-        renderCopyButton(url)
+        h('span', null, label),
+        url ? renderCopyButton(url) : null
       ]
     )
   }
