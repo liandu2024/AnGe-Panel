@@ -551,7 +551,7 @@ function getGroupDotTop(groupId?: number) {
                         title="修改"
                         @click.stop="quickEditWebpage(item)"
                       >
-                        <SvgIcon class="text-sm" icon="material-symbols:edit-square-outline" />
+                        <SvgIcon class="text-sm" icon="basil:edit-solid" />
                       </div>
                       <div 
                         class="p-1 rounded bg-red-500/80 hover:bg-red-500 cursor-pointer flex items-center justify-center text-white"
