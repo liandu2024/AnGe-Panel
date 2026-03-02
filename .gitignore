@@ -50,3 +50,8 @@ _tmp_move/
 web/
 service/database/
 service/web/
+
+# runtime data (keep seed/ tracked)
+/database/
+uploads/*
+!uploads/.gitkeep

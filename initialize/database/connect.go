@@ -70,11 +70,25 @@ func (d *MySQLConfig) Connect() (db *gorm.DB, err error) {
 // Connect sqllite3连接
 func (d *SQLiteConfig) Connect() (db *gorm.DB, err error) {
 	filePath := d.Filename
+
+	// If database file does not exist, try to seed it from ./seed/database/database.db
+	// This provides a safe, deterministic “base template” without overwriting existing user data.
+	if ok, _ := cmn.PathExists(filePath); !ok {
+		seedDb := path.Join("seed", "database", "database.db")
+		if seedOk, _ := cmn.PathExists(seedDb); seedOk {
+			// ensure parent dir exists
+			_ = os.MkdirAll(path.Dir(filePath), 0700)
+			if errCopy := copyFile(seedDb, filePath); errCopy != nil {
+				// do not hard fail; fallback to empty db creation
+				log.Println("seed db copy failed:", errCopy)
+			}
+		}
+	}
+
 	exists := false
 	if exists, err = cmn.PathExists(path.Dir(filePath)); err != nil {
 		return
 	} else {
-
 		// 创建文件夹
 		if !exists {
 			if err = os.MkdirAll(path.Dir(filePath), 0700); err != nil {

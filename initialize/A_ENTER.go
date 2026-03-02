@@ -123,6 +123,9 @@ func DatabaseConnect() {
 
 	database.CreateDatabase(databaseDrive, global.Db)
 
+	// Seed uploads from template if uploads directory is missing
+	database.EnsureSeedUploads()
+
 	database.NotFoundAndCreateUser(global.Db)
 	database.NotFoundAndCreateExampleData(global.Db)
 }
