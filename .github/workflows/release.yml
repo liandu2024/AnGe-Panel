@@ -38,42 +38,27 @@ jobs:
 
       - name: Copy web assets into backend
         run: |
-          rm -rf service/web
-          mkdir -p service/web
-          cp -r dist/* service/web/
+          rm -rf service/web web
+          mkdir -p web
+          cp -r dist/* web/
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
-          cache-dependency-path: service/go.sum
+          cache-dependency-path: go.sum
 
       - name: Build backend (linux/${{ matrix.arch }})
-        working-directory: service
         env:
           GOOS: linux
           GOARCH: ${{ matrix.arch }}
           CGO_ENABLED: 0
           GO111MODULE: on
         run: |
-          echo "PWD=$(pwd)"
-          ls -la
-          echo "---- go env (key) ----"
           go env GOMOD GO111MODULE GOPATH GOROOT
-
-          echo "---- assets/bindata.go ----"
-          # bindata.go is tracked in repo for deterministic CI builds.
-          ls -la assets | head
-
-          echo "---- go mod ----"
-          cat go.mod
           go mod download
-
-          echo "---- go list ----"
           go list ./... >/dev/null
-
-          echo "---- go build ----"
-          go build -mod=mod -trimpath -ldflags "-s -w" -o "../${{ env.APP_NAME }}" ./main.go
+          go build -mod=mod -trimpath -ldflags "-s -w" -o "./${{ env.APP_NAME }}" ./main.go
 
       - name: Package
         run: |
@@ -81,8 +66,8 @@ jobs:
           OUT_DIR="${{ env.APP_NAME }}_${VERSION}_linux_${{ matrix.arch }}"
           mkdir -p "$OUT_DIR"
           cp "${{ env.APP_NAME }}" "$OUT_DIR/${{ env.APP_NAME }}"
-          cp -r service/conf "$OUT_DIR/conf"
-          cp -r service/web "$OUT_DIR/web"
+          cp -r conf "$OUT_DIR/conf"
+          cp -r web "$OUT_DIR/web"
           tar -czf "${OUT_DIR}.tar.gz" "$OUT_DIR"
 
       - name: Upload to GitHub Release

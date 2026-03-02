@@ -45,6 +45,10 @@ echo "[3/6] Installing to ${INSTALL_DIR}..."
 sudo mkdir -p "$INSTALL_DIR"
 sudo tar -xzf "$TMP_DIR/${ASSET_NAME}" -C "$INSTALL_DIR" --strip-components=1
 sudo chmod +x "$INSTALL_DIR/${APP_NAME}" || true
+# Place web assets to /opt/<app>/web so backend can serve it
+if [[ -d "$INSTALL_DIR/web" ]]; then
+  sudo chown -R "$APP_NAME":"$APP_NAME" "$INSTALL_DIR/web" || true
+fi
 
 # system user
 if ! id -u "$APP_NAME" >/dev/null 2>&1; then
