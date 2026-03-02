@@ -60,11 +60,22 @@ jobs:
           ls -la
           echo "---- go env (key) ----"
           go env GOMOD GO111MODULE GOPATH GOROOT
+
+          echo "---- generate assets/bindata.go ----"
+          # This project expects package sun-panel/assets to exist.
+          # In Docker builds it's generated via go-bindata-assetfs; CI must do the same.
+          go install -a -v github.com/go-bindata/go-bindata/...@latest
+          go install -a -v github.com/elazarl/go-bindata-assetfs/...@latest
+          go-bindata-assetfs -o=assets/bindata.go -pkg=assets assets/...
+          ls -la assets | head
+
           echo "---- go mod ----"
           cat go.mod
           go mod download
+
           echo "---- go list ----"
           go list ./... >/dev/null
+
           echo "---- go build ----"
           go build -mod=mod -trimpath -ldflags "-s -w" -o "../${{ env.APP_NAME }}" ./main.go
 
