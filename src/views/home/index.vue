@@ -287,15 +287,23 @@ function quickDeleteWebpage(item: Panel.ItemInfo) {
   const itemId = item.id as number
   const groupId = item.itemIconGroupId as number
 
-  deletes([itemId]).then(({ code, msg }) => {
-    if (code === 0) {
-      ms.success(t('common.deleteSuccess'))
-      removeItemLocal(itemId, groupId)
-      refreshFilteredView()
-      nextTick(() => recalcCatalogDots())
-    } else {
-      ms.error(`${t('common.deleteFail')}:${msg}`)
-    }
+  dialog.warning({
+    title: t('common.warning'),
+    content: t('common.confirmDelete'),
+    positiveText: t('common.confirm'),
+    negativeText: t('common.cancel'),
+    onPositiveClick: () => {
+      deletes([itemId]).then(({ code, msg }) => {
+        if (code === 0) {
+          ms.success(t('common.deleteSuccess'))
+          removeItemLocal(itemId, groupId)
+          refreshFilteredView()
+          nextTick(() => recalcCatalogDots())
+        } else {
+          ms.error(`${t('common.deleteFail')}:${msg}`)
+        }
+      })
+    },
   })
 }
 
@@ -811,7 +819,7 @@ function getGroupDotTop(groupId?: number) {
                         <SvgIcon class="text-sm" icon="basil:edit-solid" />
                       </div>
                       <div 
-                        class="p-1 rounded bg-red-500/80 hover:bg-red-500 cursor-pointer flex items-center justify-center text-white"
+                        class="p-1 rounded bg-black/20 hover:bg-black/40 cursor-pointer flex items-center justify-center text-white"
                         title="删除"
                         @click.stop="quickDeleteWebpage(item)"
                       >
@@ -989,7 +997,7 @@ function getGroupDotTop(groupId?: number) {
     <NBackTop
       :listen-to="() => scrollContainerRef"
       :right="panelState.panelConfig.rightScrollBarShow === false ? 10 : 24"
-      :bottom="10"
+      :bottom="Number(panelState.panelConfig.paddingBottom ?? 10)"
       style="background-color:transparent;border: none;box-shadow: none;"
     >
       <div class="backtop-shell">

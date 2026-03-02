@@ -32,7 +32,7 @@ export function defaultStatePanelConfig(): Panel.panelConfig {
     systemMonitorShowTitle: true,
     systemMonitorPublicVisitModeShow: false,
     netModeChangeButtonShow: true,
-    floatingToolsPosition: 'right-bottom',
+    floatingToolsPosition: 'right-top',
     leftCatalogShow: true,
     rightScrollBarShow: true,
 
