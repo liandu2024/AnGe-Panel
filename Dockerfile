@@ -55,15 +55,21 @@ COPY --from=web_image /build/dist /app/web
 
 COPY --from=server_image /build/ange-panel /app/ange-panel
 
+# Seed template (db + uploads + conf) shipped with image
+COPY ./seed /app/seed
+
+# Entrypoint prepares /data and symlinks /app/{conf,database,uploads,runtime} -> /data/*
+COPY ./docker/entrypoint.sh /entrypoint.sh
+
 # 中国国内源
 # RUN sed -i "s@dl-cdn.alpinelinux.org@mirrors.aliyun.com@g" /etc/apk/repositories
 
 EXPOSE 3002
 
 RUN apk add --no-cache bash ca-certificates su-exec tzdata \
-    && mkdir -p /app/uploads \
-    && chmod +x /app/ange-panel \
+    && chmod +x /app/ange-panel /entrypoint.sh \
     && test -f /app/ange-panel \
     && /app/ange-panel -config
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/app/ange-panel"]
