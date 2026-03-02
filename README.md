@@ -134,7 +134,9 @@ curl -fsSL https://raw.githubusercontent.com/liandu2024/AnGe-Panel/main/scripts/
 示例：
 
 ```bash
-docker run -d --name ange-panel -p 3002:3002 \
+# Single-volume mount (recommended)
+docker run -d --name ange-panel --restart=unless-stopped -p 3002:3002 \
+  -v /root/ange-data:/data \
   ghcr.io/<owner>/<repo>:latest
 ```
 
