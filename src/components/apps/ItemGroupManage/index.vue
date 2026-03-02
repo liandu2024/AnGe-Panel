@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import type { FormInst, FormRules } from 'naive-ui'
-import { NButton, NCard, NForm, NFormItem, NInput, useDialog, useMessage } from 'naive-ui'
+import { NButton, NCard, NForm, NFormItem, NInput, NTabPane, NTabs, useDialog, useMessage } from 'naive-ui'
 import { VueDraggable } from 'vue-draggable-plus'
 import { deletes, edit, getList, saveSort } from '@/api/panel/itemIconGroup'
 import { RoundCardModal, SvgIcon } from '@/components/common'
@@ -141,13 +141,16 @@ onMounted(() => {
 <template>
   <div class="h-full">
     <div class="p-2">
-      <div class="mb-2 flex items-center gap-2">
-        <NButton size="small" :type="currentGroupType === 'website' ? 'primary' : 'default'" @click="handleSwitchGroupType('website')">
-          网站
-        </NButton>
-        <NButton size="small" :type="currentGroupType === 'webpage' ? 'primary' : 'default'" @click="handleSwitchGroupType('webpage')">
-          网页
-        </NButton>
+      <div class="mb-2">
+        <NTabs
+          size="small"
+          type="segment"
+          :value="currentGroupType"
+          @update:value="(v: 'website' | 'webpage') => handleSwitchGroupType(v)"
+        >
+          <NTabPane name="website" tab="网站导航" />
+          <NTabPane name="webpage" tab="网页收藏" />
+        </NTabs>
       </div>
 
       <NButton type="success" size="small" style="margin-right: 10px;" @click="handleAddGroup">
