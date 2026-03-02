@@ -74,9 +74,14 @@ async function importIcons(): Promise<string | null> {
           }
         }
       }
-      // 删除所有分组
+      // 删除所有分组（逐个删除，避免后端对批量 ids 有限制）
       if (groupIds.length > 0) {
-        await deleteGroups(groupIds)
+        for (const gid of groupIds) {
+          const res: any = await deleteGroups([gid])
+          if (res?.code !== 0) {
+            console.error('delete group failed', gid, res?.msg)
+          }
+        }
       }
     }
   }
