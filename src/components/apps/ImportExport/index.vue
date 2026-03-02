@@ -115,6 +115,7 @@ async function importIcons(): Promise<string | null> {
               lanUrl: iconElement.lanUrl,
               description: iconElement.description,
               openMethod: iconElement.openMethod,
+              pinned: !!(iconElement as any).pinned,
               itemIconGroupId: groupId,
             })
 
@@ -184,6 +185,7 @@ async function exportIcons(): Promise<IconGroup[]> {
             lanUrl: iconElement.lanUrl || '',
             description: iconElement.description || '',
             openMethod: iconElement.openMethod || 1,
+            pinned: !!iconElement.pinned,
           })
         }
       }
