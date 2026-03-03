@@ -433,6 +433,10 @@ function handleSaveSort(itemGroup: ItemGroup) {
 
     saveSort({ itemIconGroupId: itemGroup.id as number, sortItems: saveItems }).then(({ code, msg }) => {
       if (code === 0) {
+        // keep local sort values consistent (useful for next drag session)
+        for (let i = 0; i < itemGroup.items!.length; i++) {
+          ;(itemGroup.items![i] as any).sort = i + 1
+        }
         ms.success(t('common.saveSuccess'))
         itemGroup.sortStatus = false
       }
@@ -769,7 +773,7 @@ function getGroupDotTop(groupId?: number) {
             <div v-if="currentGroupType === 'webpage'">
               <div v-if="itemGroup.items">
                 <VueDraggable
-                  v-model="itemGroup.items" item-key="sort" :animation="300"
+                  v-model="itemGroup.items" item-key="id" :animation="300"
                   :class="[
                     'w-full webpage-list-container show-native-scrollbar',
                     (itemGroup.items && itemGroup.items.length > 10) ? 'webpage-list-fixed' : ''
@@ -842,7 +846,7 @@ function getGroupDotTop(groupId?: number) {
               <div v-if="panelState.panelConfig.iconStyle === PanelPanelConfigStyleEnum.info">
                 <div v-if="itemGroup.items">
                   <VueDraggable
-                    v-model="itemGroup.items" item-key="sort" :animation="300"
+                    v-model="itemGroup.items" item-key="id" :animation="300"
                     class="icon-info-box"
                     filter=".not-drag"
                     :disabled="!itemGroup.sortStatus"
@@ -878,7 +882,7 @@ function getGroupDotTop(groupId?: number) {
               <div v-if="panelState.panelConfig.iconStyle === PanelPanelConfigStyleEnum.icon">
                 <div v-if="itemGroup.items">
                   <VueDraggable
-                    v-model="itemGroup.items" item-key="sort" :animation="300"
+                    v-model="itemGroup.items" item-key="id" :animation="300"
                     class="icon-small-box"
 
                     filter=".not-drag"
