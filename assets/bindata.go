@@ -1,5 +1,6 @@
 // Code generated for package assets by go-bindata DO NOT EDIT. (@generated)
 // sources:
+// assets/bindata.go
 // assets/conf.example.ini
 // assets/lang/en-us.ini
 // assets/lang/zh-cn.ini
@@ -81,6 +82,26 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
 
+var _assetsBindataGo = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func assetsBindataGoBytes() ([]byte, error) {
+	return bindataRead(
+		_assetsBindataGo,
+		"assets/bindata.go",
+	)
+}
+
+func assetsBindataGo() (*asset, error) {
+	bytes, err := assetsBindataGoBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "assets/bindata.go", size: 0, mode: os.FileMode(436), modTime: time.Unix(1772513061, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 var _assetsConfExampleIni = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x94\x52\x4d\x6b\xdc\x30\x10\xbd\xeb\x57\x0c\xf8\x90\xe4\x62\x7b\xb3\x90\xd0\x05\x5f\xda\xd0\x5b\xa1\x85\x42\x0f\xc1\x98\xb1\x34\x8e\x05\xb6\xe4\x1d\x8d\xb2\xcd\xbf\x2f\x92\x77\xbb\xfd\xca\x96\xf8\x64\x69\xde\x9b\x79\x7a\x6f\x0a\x68\xfe\xf9\xa9\x02\xde\x63\xb0\x1a\xb4\x77\x83\x7d\x8a\x8c\x62\xbd\x53\xaf\xc2\x1f\x7b\x0c\xd4\xaa\x02\xbe\x51\x0f\x1c\x1d\x2c\x9e\xa5\x84\x07\x1a\x30\x4e\xb2\xdb\xd6\xf5\xad\x1a\x45\x96\x2e\xdd\x37\xf9\x58\xc0\x03\x0a\x26\x1e\x18\xb6\xcf\xc4\xf0\x38\xbf\x84\xfd\x54\x85\xfd\x64\x85\xae\x8f\xdc\x9b\x56\x99\x23\xae\xcb\xb8\x66\xad\xab\x02\x3e\xa0\x1e\xcf\x64\x26\x63\x43\x35\xd3\xec\xf9\xe5\x17\xb2\x4e\xa0\x23\x73\x2d\xaa\x02\xbe\x44\x8a\xff\x65\xee\x13\xe8\x4f\xe6\x47\x3b\x11\xe4\x9e\xb0\xa0\x8c\x70\xfd\x79\xa2\xf4\x84\x20\xc8\x02\x07\x2b\x23\xc8\x48\xa0\x23\x33\x39\x59\x31\x57\x65\x75\x75\x93\xbc\x41\x76\xd6\x3d\xed\xe0\xeb\x48\x30\xd8\x89\x02\xc8\x88\x02\x23\x3e\x13\xf4\x44\x0e\xe2\x32\x79\x34\x64\x00\x07\x21\xce\x9d\x66\x6f\xec\x60\x75\xf6\x1f\x34\x3a\xe7\x05\x7a\x02\xd4\x9a\x42\x20\xa3\x82\x8f\xac\xa9\x4b\x83\x9a\xb2\x5a\x1b\x84\xbf\x85\x96\x27\xa0\xd0\xbc\x9c\xd0\x1c\x9d\xd8\x99\xaa\x74\xa7\x5e\x0f\xb7\x80\x4f\x29\x18\x30\xbf\xe7\x75\x61\x1b\x72\x90\xad\x1a\x7d\x90\x66\x73\x7b\x5f\xd6\x65\x5d\x6e\xd4\x9a\xfd\xb6\xbe\x53\x31\x10\x3b\x9c\xa9\x61\xef\x45\x2d\x18\xc2\xc1\xb3\x59\x4f\xa6\xef\x72\x29\x44\xd7\x2d\xe8\x68\x52\x07\xb4\xd2\x25\xa1\x3e\x4a\xb3\xa9\xeb\x8b\x52\xd7\xed\x78\x83\xd6\x95\xd0\xaa\x14\xc8\xc9\x98\x13\xfb\xe7\x4f\x69\xfa\x8b\x53\xf3\x0a\xbd\x61\x68\xc6\xb7\x0a\x8d\x61\x0a\xe1\xec\xd1\xee\x6e\x7b\xff\xee\x6c\x88\x5a\x98\x06\xfb\xfd\xec\xc5\x4e\x99\xbe\xa9\x7f\x04\x00\x00\xff\xff\x2a\x15\x64\x32\xb6\x03\x00\x00")
 
 func assetsConfExampleIniBytes() ([]byte, error) {
@@ -96,7 +117,7 @@ func assetsConfExampleIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/conf.example.ini", size: 950, mode: os.FileMode(436), modTime: time.Unix(1772301973, 0)}
+	info := bindataFileInfo{name: "assets/conf.example.ini", size: 950, mode: os.FileMode(436), modTime: time.Unix(1772461312, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -116,7 +137,7 @@ func assetsLangEnUsIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/lang/en-us.ini", size: 49, mode: os.FileMode(436), modTime: time.Unix(1772301973, 0)}
+	info := bindataFileInfo{name: "assets/lang/en-us.ini", size: 49, mode: os.FileMode(436), modTime: time.Unix(1772461312, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -136,7 +157,7 @@ func assetsLangZhCnIni() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/lang/zh-cn.ini", size: 49, mode: os.FileMode(436), modTime: time.Unix(1772301973, 0)}
+	info := bindataFileInfo{name: "assets/lang/zh-cn.ini", size: 49, mode: os.FileMode(436), modTime: time.Unix(1772461312, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -156,12 +177,12 @@ func assetsReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/readme.md", size: 1466, mode: os.FileMode(436), modTime: time.Unix(1772301973, 0)}
+	info := bindataFileInfo{name: "assets/readme.md", size: 1466, mode: os.FileMode(436), modTime: time.Unix(1772461312, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _assetsVersion = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x32\x34\xa8\x31\xd4\x33\xd6\x33\x00\x04\x00\x00\xff\xff\x10\xcf\x99\x2f\x08\x00\x00\x00")
+var _assetsVersion = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x32\xb4\xa8\x31\xd0\x33\xd4\x33\xb4\x00\x04\x00\x00\xff\xff\x62\xef\x33\x4c\x09\x00\x00\x00")
 
 func assetsVersionBytes() ([]byte, error) {
 	return bindataRead(
@@ -176,7 +197,7 @@ func assetsVersion() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "assets/version", size: 8, mode: os.FileMode(436), modTime: time.Unix(1772301973, 0)}
+	info := bindataFileInfo{name: "assets/version", size: 9, mode: os.FileMode(436), modTime: time.Unix(1772512708, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -233,6 +254,7 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
+	"assets/bindata.go":       assetsBindataGo,
 	"assets/conf.example.ini": assetsConfExampleIni,
 	"assets/lang/en-us.ini":   assetsLangEnUsIni,
 	"assets/lang/zh-cn.ini":   assetsLangZhCnIni,
@@ -244,13 +266,11 @@ var _bindata = map[string]func() (*asset, error){
 // directory embedded in the file by go-bindata.
 // For example if you run go-bindata on data/... and data contains the
 // following hierarchy:
-//
-//	data/
-//	  foo.txt
-//	  img/
-//	    a.png
-//	    b.png
-//
+//     data/
+//       foo.txt
+//       img/
+//         a.png
+//         b.png
 // then AssetDir("data") would return []string{"foo.txt", "img"}
 // AssetDir("data/img") would return []string{"a.png", "b.png"}
 // AssetDir("foo.txt") and AssetDir("notexist") would return an error
@@ -284,6 +304,7 @@ type bintree struct {
 
 var _bintree = &bintree{nil, map[string]*bintree{
 	"assets": &bintree{nil, map[string]*bintree{
+		"bindata.go":       &bintree{assetsBindataGo, map[string]*bintree{}},
 		"conf.example.ini": &bintree{assetsConfExampleIni, map[string]*bintree{}},
 		"lang": &bintree{nil, map[string]*bintree{
 			"en-us.ini": &bintree{assetsLangEnUsIni, map[string]*bintree{}},

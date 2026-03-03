@@ -4,7 +4,8 @@ import { onMounted, ref } from 'vue'
 import { get } from '@/api/system/about'
 import srcSvglogo from '@/assets/logo.svg'
 import srcGithub from '@/assets/about_image/github.png'
-import srcBilibili from '@/assets/about_image/bilibili.png'
+import srcTelegram from '@/assets/about_image/telegram.svg'
+import srcMarket from '@/assets/about_image/market.svg'
 
 interface Version {
   versionName: string
@@ -31,7 +32,7 @@ onMounted(() => {
       </div>
       <div class="text-xl">
         <NGradientText type="info">
-          <a href="https://github.com/liandu2024/AnGe-Panel/releases" class="font-semibold" :title="$t('apps.about.viewUpdateLog')" target="_blank">v{{ versionName }}</a>
+          <a href="https://github.com/liandu2024/AnGe-Panel/releases" class="font-semibold" :title="$t('apps.about.viewUpdateLog')" target="_blank">Ver: {{ versionName }}</a>
         </NGradientText>
       </div>
       <div class="mt-2">
@@ -49,11 +50,11 @@ onMounted(() => {
           <a href="https://github.com/liandu2024/AnGe-Panel" target="_blank" class="link">Github</a>
         </div>
         <div class="flex items-center mx-[10px]">
-          <img class="w-[20px] h-[20px] mr-[5px]" :src="srcBilibili" alt="">
+          <img class="w-[20px] h-[20px] mr-[5px]" :src="srcTelegram" alt="">
           <a href="https://t.me/angeworld2024" target="_blank" class="link">安格视界TG群</a>
         </div>
         <div class="flex items-center mx-[10px]">
-          <img class="w-[20px] h-[20px] mr-[5px]" :src="srcBilibili" alt="">
+          <img class="w-[20px] h-[20px] mr-[5px]" :src="srcMarket" alt="">
           <a href="https://blog.angeworld.cc/market" target="_blank" class="link">安格超市</a>
         </div>
       </div>
