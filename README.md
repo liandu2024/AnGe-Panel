@@ -15,6 +15,7 @@
 </div>
 
 A perfect website navigation + webpage bookmarks panel.
+
 完美的网站导航 + 网页收藏夹。
 
 ---
@@ -50,16 +51,9 @@ A perfect website navigation + webpage bookmarks panel.
 ![](./doc/images/mobile-1.jpg)
 ![](./doc/images/mobile-2.jpg)
 
-## 🔐 首次登录
+## 🐳 Docker 部署
 
-- **默认管理员账号**：`admin`
-- **默认管理员密码**：`admin`
-
-首次启动时会自动创建示例分组和示例网站/网页链接，方便快速体验功能。
-
-> ⚠️ 首次登录后请尽快修改密码！
-
-## 🐳 Docker 部署（推荐）
+在支持 Docker 设备上执行以下指令：
 
 ```bash
 docker run -d --name ange-panel --restart=unless-stopped \
@@ -70,21 +64,32 @@ docker run -d --name ange-panel --restart=unless-stopped \
 
 > 说明：数据持久化存储在 `/root/ange-data` 目录，首次启动后可在面板内修改配置。
 
+## 🔐 首次登录
+
+登录网址：http://[部署设备的IP]:3002
+
+- **默认管理员账号**：`admin`
+- **默认管理员密码**：`admin`
+
+首次启动时会自动创建示例分组和示例网站/网页链接，方便快速体验功能。
+
+> ⚠️ 首次登录后请尽快修改密码！
+
 ## 📋 文档
 
 - [中文文档](https://github.com/liandu2024/AnGe-Panel/blob/main/README.md)
 - [English Documentation](https://github.com/liandu2024/AnGe-Panel/blob/main/README_EN.md)
 
-## 🏖️ 交流群
+## 🏖️ 其他
 
 - [Telegram 群](https://t.me/angeworld2024)
 - [安格超市](https://blog.angeworld.cc/market)
 
 ---
 
-## ❤️ Thanks
+## ❤️ 感谢
 
-- [Sun-Panel](https://github.com/hslr-s/sun-panel) - Original project
+- 本项目基于 [Sun-Panel](https://github.com/hslr-s/sun-panel) 项目做的二次开发，感谢原作者辛勤付出！
 
 ---
 
